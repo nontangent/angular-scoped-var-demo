@@ -1,10 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, HostBinding, HostListener } from '@angular/core';
+
+const STYLE = `// app.component.scss
+@use 'scoped-var/strict' as *;
+:host {
+  @include var(--color, red);
+  color: var(--color);
+}`
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styles: [STYLE],
+  host: {'class': 'box'},
 })
 export class AppComponent {
-  title = 'angular-scoped-var-demo';
+  @HostBinding('attr.expanded') expanded = true;
+  @HostListener('click', ['$event']) onClick(event: Event) {
+    event.stopPropagation();
+    this.expanded = !this.expanded
+  }
+
+  innerText = STYLE;
 }
